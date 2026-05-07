@@ -698,7 +698,10 @@ textarea.inp{resize:vertical;min-height:72px}
 // ║  ZENTO SHOP — Clean Version                     ║
 // ╚══════════════════════════════════════════════════╝
 
-const API_URL = 'http://localhost:3000/api';
+// Auto-detect API URL
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/api'
+  : 'https://zento-4g79.onrender.com/api';
 
 // ── State ──
 let CU = null, prods = [], slides = [], settings = {};
