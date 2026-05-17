@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ZENTO">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZENTO — Fresh Groceries</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -684,16 +691,16 @@ import {
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* ─── Your Firebase Config ─── */
 const firebaseConfig = {
-  apiKey: "AIzaSyCV4danc7NH3BfsQCxF2nuS0iV_V1aoQe0",
-  authDomain: "symcodermv-cba04.firebaseapp.com",
-  databaseURL: "https://symcodermv-cba04-default-rtdb.firebaseio.com",
-  projectId: "symcodermv-cba04",
-  storageBucket: "symcodermv-cba04.firebasestorage.app",
-  messagingSenderId: "432074388052",
-  appId: "1:432074388052:web:07ec04181e2af980b2b3c1",
-  measurementId: "G-GBHF3K1C8P"
+  apiKey:            "AIzaSyBv6VN_oLx3lv1K3WOnzqUtl59GgBMS4TM",
+  authDomain:        "zentoshop.firebaseapp.com",
+  databaseURL:       "https://zentoshop-default-rtdb.firebaseio.com",
+  projectId:         "zentoshop",
+  storageBucket:     "zentoshop.firebasestorage.app",
+  messagingSenderId: "1098429506908",
+  appId:             "1:1098429506908:web:1d301d70f1e55861164d99",
+  measurementId:     "G-N30XMZKYJP"
 };
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
@@ -1552,7 +1559,8 @@ function placeOrder(tot) {
     status:'pending',paymentStatus:'pending_review',paymentMethod:'bank_transfer',
     referralCodeUsed: appliedRefCode?.code || null,
     referralOwnerUid: appliedRefCode?.ownerUid || null,
-    referralDiscount: refDsc
+    referralDiscount: refDsc,
+    ptsUsed: appliedRefCode?.ptsUsed || 0
   };
   $('bank-amt').textContent=finalTot.toFixed(2); applyBankUI(); rmFile(); openModal('ov-bank');
 }
@@ -1615,44 +1623,28 @@ async function confirmPay() {
     `🕐 ${new Date().toLocaleString('en-MV', {timeZone:'Indian/Maldives',hour12:true})}`;
   await tgSend(tgMsg);
 
-  // ── Award order points to buyer ──
-  if (CU) {
+  // -- Referral: deduct owner points as discount (no bonus, sharing IS the use) --
+  if (pendingOrder.referralOwnerUid && (pendingOrder.ptsUsed || 0) > 0) {
     try {
-      const orderPts = Math.floor(pendingOrder.total * (pointsConfig.orderPointsRate || 10) / 100);
-      const userSnap = await get(ref(db, 'users/' + CU.uid));
-      if (userSnap.exists()) {
-        const cur = userSnap.val();
-        const newPts = (cur.points || 0) + orderPts;
-        await update(ref(db, 'users/' + CU.uid), { points: newPts });
-        await push(ref(db, 'users/' + CU.uid + '/pointsHistory'), {
-          desc: `🛒 Order #${oid} — Earned from purchase`,
-          points: orderPts, type: 'earn', date: new Date().toISOString()
-        });
-        CU.points = newPts;
-      }
-    } catch(pe) { console.warn('Points award failed', pe); }
-  }
-
-  // ── Credit referral code owner points ──
-  if (pendingOrder.referralOwnerUid) {
-    try {
-      const refPts = pointsConfig.referralPoints || 50;
       const ownerSnap = await get(ref(db, 'users/' + pendingOrder.referralOwnerUid));
       if (ownerSnap.exists()) {
-        const owner = ownerSnap.val();
-        const newOwnerPts = (owner.points || 0) + refPts;
+        const owner       = ownerSnap.val();
+        const newPts      = Math.max(0, (owner.points || 0) - (pendingOrder.ptsUsed || 0));
         await update(ref(db, 'users/' + pendingOrder.referralOwnerUid), {
-          points: newOwnerPts,
+          points: newPts,
           referralCount: (owner.referralCount || 0) + 1
         });
         await push(ref(db, 'users/' + pendingOrder.referralOwnerUid + '/pointsHistory'), {
-          desc: `🏷️ Order #${oid} used your code ${pendingOrder.referralCodeUsed}`,
-          points: refPts, type: 'earn', date: new Date().toISOString()
+          desc: 'Code ' + pendingOrder.referralCodeUsed + ' used by someone — ' + (pendingOrder.ptsUsed||0) + ' pts deducted as discount',
+          points: pendingOrder.ptsUsed || 0,
+          type: 'use',
+          date: new Date().toISOString()
         });
       }
-    } catch(re) { console.warn('Referral credit failed', re); }
-    appliedRefCode = null; // Reset after use
+    } catch(re) { console.warn('Referral deduct failed', re); }
+    appliedRefCode = null;
   }
+
 
   // Clear pending discount after use
   if (CU && CU.pendingDiscount > 0) {
@@ -1861,7 +1853,7 @@ async function renderRewards() {
     + '<div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">How to Earn Points</div>'
     + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#f0fff0"><span style="font-size:18px">\u{1F389}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Create Account</div><div class="pts-earn-sub">One-time welcome bonus</div></div><div class="pts-earn-pts">+' + (pointsConfig.signupPoints||100) + ' pts</div></div>'
     + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#fff8f0"><span style="font-size:18px">\u{1F6D2}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Place an Order</div><div class="pts-earn-sub">' + (pointsConfig.orderPointsRate||10) + ' pts per MVR spent</div></div><div class="pts-earn-pts">+' + (pointsConfig.orderPointsRate||10) + ' pts/MVR</div></div>'
-    + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#f5f0ff"><span style="font-size:18px">\u{1F465}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Refer a Friend to ZentoShop</div><div class="pts-earn-sub">Both you and your friend get bonus points</div></div><div class="pts-earn-pts">+' + (pointsConfig.referralPoints||50) + ' pts</div></div>'
+    + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#f5f0ff"><span style="font-size:18px">\u{1F465}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Share Your Code</div><div class="pts-earn-sub">Friends use your code at checkout — your points are used as their discount</div></div><div class="pts-earn-pts" style="color:var(--red)">pts used</div></div>'
     + '</div>'
 
     + '<div class="ref-box">'
@@ -1948,56 +1940,65 @@ async function redeemPoints() {
 async function applyRefCode() {
   const code = ($('co-ref-inp')?.value || '').trim().toUpperCase();
   if (!code) { notify('Enter a referral code', 'err'); return; }
-  if (code === CU?.referralCode) { notify("You can't use your own code", 'err'); return; }
-
-  // Check if already applied
+  if (code === CU?.referralCode) { notify('You cannot use your own code', 'err'); return; }
   if (appliedRefCode?.code === code) { notify('Code already applied ✓'); return; }
 
   const btn = document.getElementById('co-apply-btn');
-  if (btn) { btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; btn.disabled = true; }
+  if (btn) { btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Checking...'; btn.disabled = true; }
 
   try {
-    // Look up code from public shop/referralCodes path (no auth needed to read)
     const codeSnap = await get(ref(db, 'shop/referralCodes/' + code));
     if (!codeSnap.exists()) {
       notify('Invalid referral code', 'err');
       if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
       return;
     }
-    const codeData = codeSnap.val();
+    const codeData  = codeSnap.val();
     const ownerUid  = codeData.uid  || null;
     const ownerName = codeData.name || 'User';
-
     if (!ownerUid) {
       notify('Invalid referral code', 'err');
       if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
       return;
     }
 
-    // Calculate discount — use referralDiscount from config
-    const discount = pointsConfig.referralDiscount || pointsConfig.redeemDiscount || 10;
-    appliedRefCode = { code, ownerUid, ownerName, discount };
+    // Check owner points balance
+    const ownerSnap    = await get(ref(db, 'users/' + ownerUid));
+    const ownerPts     = ownerSnap.exists() ? (ownerSnap.val().points || 0) : 0;
+    const threshold    = pointsConfig.redeemThreshold || 100;
+    const discPerBlock = pointsConfig.redeemDiscount  || 10;
 
-    // Show applied box
-    const box = $('ref-applied-box');
-    if (box) box.style.display = 'flex';
-    const txt = $('ref-applied-text'); if (txt) txt.textContent = 'Code "' + code + '" applied!';
-    const sub = $('ref-applied-sub'); if (sub) sub.textContent = 'From ' + ownerName + ' · They earn points when you order';
-    const disc = $('ref-applied-disc'); if (disc) disc.textContent = '- ' + mvr(discount);
+    if (ownerPts < threshold) {
+      notify(ownerName + ' has only ' + ownerPts + ' pts — needs ' + threshold + ' pts to share a discount', 'err');
+      if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
+      return;
+    }
 
-    // Show discount row in summary
-    const row = $('ref-disc-row'); if (row) row.style.display = 'flex';
-    const amt = $('ref-disc-amt'); if (amt) amt.textContent = '- ' + mvr(discount);
+    // Discount = owner full points value
+    const blocks   = Math.floor(ownerPts / threshold);
+    const discount = blocks * discPerBlock;
+    const ptsUsed  = blocks * threshold;
 
-    // Update total display
+    appliedRefCode = { code, ownerUid, ownerName, discount, ptsUsed };
+
+    const box = $('ref-applied-box'); if (box) box.style.display = 'flex';
+    const txt = $('ref-applied-text');
+    if (txt) txt.textContent = 'Code "' + code + '" applied!';
+    const sub = $('ref-applied-sub');
+    if (sub) sub.textContent = ownerName + ' gives you ' + mvr(discount) + ' off (' + ptsUsed + ' pts deducted from their balance)';
+    const dEl = $('ref-applied-disc'); if (dEl) dEl.textContent = '- ' + mvr(discount);
+    const row  = $('ref-disc-row');    if (row)  row.style.display  = 'flex';
+    const amt  = $('ref-disc-amt');    if (amt)  amt.textContent    = '- ' + mvr(discount);
+
     recalcCheckoutTotal();
-    notify('Referral code applied! ' + mvr(discount) + ' off 🎉');
+    notify('Code applied! You save ' + mvr(discount) + ' — ' + ptsUsed + ' pts will be deducted from ' + ownerName);
   } catch(e) {
     notify('Error: ' + e.message, 'err');
   } finally {
     if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
   }
 }
+
 
 function removeRefCode() {
   appliedRefCode = null;
@@ -2120,6 +2121,15 @@ function notify(msg,type){const el=document.createElement('div');el.className='n
 /* ─── SEARCH ─── */
 $('hdr-search').addEventListener('input',function(){curSearch=this.value;if(curSearch.length>0){curCat=null;renderProducts(null,curSearch);nav('products');}});
 $('sb-search').addEventListener('keypress',function(e){if(e.key==='Enter'){curSearch=this.value;curCat=null;nav('products');closeSB();}});
+// ── PWA Service Worker ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(() => {});
+  });
+}
+
 document.addEventListener('keypress',e=>{
   if(e.target.id==='l-pw'&&e.key==='Enter')doLogin();
   if(e.target.id==='r-cp'&&e.key==='Enter')doRegister();
