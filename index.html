@@ -684,16 +684,16 @@ import {
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* ─── Your Firebase Config ─── */
 const firebaseConfig = {
-  apiKey: "AIzaSyCV4danc7NH3BfsQCxF2nuS0iV_V1aoQe0",
-  authDomain: "symcodermv-cba04.firebaseapp.com",
-  databaseURL: "https://symcodermv-cba04-default-rtdb.firebaseio.com",
-  projectId: "symcodermv-cba04",
-  storageBucket: "symcodermv-cba04.firebasestorage.app",
-  messagingSenderId: "432074388052",
-  appId: "1:432074388052:web:07ec04181e2af980b2b3c1",
-  measurementId: "G-GBHF3K1C8P"
+  apiKey:            "AIzaSyBv6VN_oLx3lv1K3WOnzqUtl59GgBMS4TM",
+  authDomain:        "zentoshop.firebaseapp.com",
+  databaseURL:       "https://zentoshop-default-rtdb.firebaseio.com",
+  projectId:         "zentoshop",
+  storageBucket:     "zentoshop.firebasestorage.app",
+  messagingSenderId: "1098429506908",
+  appId:             "1:1098429506908:web:1d301d70f1e55861164d99",
+  measurementId:     "G-N30XMZKYJP"
 };
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
@@ -743,6 +743,11 @@ const $   = id => document.getElementById(id);
 
 /* ── expose to HTML onclick ── */
 window.nav=nav; window.filterCat=filterCat;
+window.applyRefCode=applyRefCode; window.removeRefCode=removeRefCode;
+window.recalcCheckoutTotal=recalcCheckoutTotal;
+window.copyRefCode=copyRefCode; window.copyRefLink=copyRefLink;
+window.shareWhatsApp=shareWhatsApp; window.shareViber=shareViber; window.shareTelegram=shareTelegram;
+window.redeemPoints=redeemPoints; window.renderRewards=renderRewards;
 window.homeCatClick=function(id){ curCat=id; nav('products'); };
 window.prodCatClick=function(id){ curCat=id; renderProducts(id,curSearch); };
 window.setLang=setLang;
@@ -1486,7 +1491,7 @@ function renderCheckout() {
           <div class="ref-code-apply-title"><i class="fa fa-ticket-alt" style="color:var(--lime)"></i> Have a referral code?</div>
           <div class="ref-code-row">
             <input class="inp" id="co-ref-inp" placeholder="e.g. ZT-O61U2D" maxlength="12" oninput="this.value=this.value.toUpperCase()">
-            <button class="btn btn-lime btn-sm" onclick="applyRefCode()" style="white-space:nowrap;padding:10px 16px"><i class="fa fa-check"></i> Apply</button>
+            <button class="btn btn-lime btn-sm" id="co-apply-btn" onclick="applyRefCode()" style="white-space:nowrap;padding:10px 16px"><i class="fa fa-check"></i> Apply</button>
           </div>
           <div class="ref-applied-box" id="ref-applied-box" style="display:none">
             <div class="ref-applied-icon"><i class="fa fa-star"></i></div>
@@ -1772,127 +1777,147 @@ function renderOrders() {
 async function renderRewards() {
   if (!CU) { openAuth(); return; }
   const el = $('rewards-body');
-  el.innerHTML = `<div class="empty"><i class="fa fa-spinner fa-spin" style="font-size:36px;opacity:.3;margin-bottom:12px;display:block"></i><p>Loading your points…</p></div>`;
+  el.innerHTML = '<div class="empty"><i class="fa fa-spinner fa-spin" style="font-size:36px;opacity:.3;margin-bottom:12px;display:block"></i><p>Loading\u2026</p></div>';
 
-  // Fresh data from Firebase
-  let userData = {};
-  let history = [];
+  let historyItems = [];
   try {
     const snap = await get(ref(db, 'users/' + CU.uid));
     if (snap.exists()) {
       const val = snap.val();
-      userData = val;
-      CU.points = val.points || 0;
-      CU.referralCode = val.referralCode || '';
+      CU.points        = val.points        || 0;
+      CU.referralCode  = val.referralCode  || '';
       CU.referralCount = val.referralCount || 0;
       if (val.pointsHistory) {
-        history = Object.values(val.pointsHistory)
+        historyItems = Object.values(val.pointsHistory)
           .sort((a,b) => new Date(b.date||0) - new Date(a.date||0))
           .slice(0, 20);
       }
     }
-  } catch {}
+  } catch(e) { console.warn('Rewards load error', e); }
 
-  const pts = CU.points || 0;
+  const pts       = CU.points || 0;
   const threshold = pointsConfig.redeemThreshold || 100;
   const discount  = pointsConfig.redeemDiscount  || 10;
   const progress  = Math.min(100, Math.round((pts % threshold) / threshold * 100));
   const canRedeem = pts >= threshold;
-  const refCode   = CU.referralCode || ('ZT-' + CU.uid.slice(0,6).toUpperCase());
-  const shareUrl  = `${window.location.origin}${window.location.pathname}?ref=${refCode}`;
-  const shareText = `🛒 Shop fresh groceries at ZentoShop! Use my referral code *${refCode}* when you sign up and we both get bonus points! 🎁`;
 
-  el.innerHTML = `
-    <!-- Points Hero -->
-    <div class="pts-hero">
-      <div class="pts-badge"><i class="fa fa-star"></i> ZentoShop REWARDS</div>
-      <div class="pts-amount">${pts.toLocaleString()}</div>
-      <div class="pts-label">POINTS BALANCE</div>
-      <div class="pts-equiv">= <span>${Math.floor(pts/threshold)*discount} MVR</span> discount value</div>
-    </div>
+  window._rwRefCode   = CU.referralCode || ('ZT-' + CU.uid.slice(0,6).toUpperCase());
+  window._rwShareText = '\u{1F6D2} Shop fresh groceries at ZentoShop! Use my referral code *' + window._rwRefCode + '* when you sign up and we both get bonus points! \u{1F381}';
+  window._rwShareUrl  = window.location.href.split('?')[0] + '?ref=' + window._rwRefCode;
 
-    <!-- Stats -->
-    <div class="pts-grid">
-      <div class="pts-card">
-        <div class="pts-card-icon">👥</div>
-        <div class="pts-card-val">${CU.referralCount || 0}</div>
-        <div class="pts-card-lbl">Friends Referred</div>
-      </div>
-      <div class="pts-card">
-        <div class="pts-card-icon">🛒</div>
-        <div class="pts-card-val">${history.filter(h=>h.type==='earn'&&h.desc.includes('Order')).length}</div>
-        <div class="pts-card-lbl">Orders Earned</div>
-      </div>
-    </div>
+  // Build history HTML without nested template literals
+  let historyHtml = '';
+  if (historyItems.length) {
+    historyHtml = historyItems.map(function(item) {
+      const dateStr = item.date ? new Date(item.date).toLocaleDateString('en-MV',{month:'short',day:'numeric',year:'numeric'}) : '\u2014';
+      const sign    = item.type === 'use' ? '-' : '+';
+      const cls     = item.type === 'use' ? 'use' : 'earn';
+      return '<div class="pts-hist-row">'
+        + '<div>'
+        + '<div class="pts-hist-desc">' + (item.desc || '\u2014') + '</div>'
+        + '<div class="pts-hist-date">' + dateStr + '</div>'
+        + '</div>'
+        + '<div class="pts-hist-amt ' + cls + '">' + sign + (item.points||0) + ' pts</div>'
+        + '</div>';
+    }).join('');
+  } else {
+    historyHtml = '<div class="empty" style="padding:20px"><i class="fa fa-history"></i><p>No history yet</p></div>';
+  }
 
-    <!-- Redeem Progress -->
-    <div class="pts-discount-bar">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <div style="font-size:13px;font-weight:700">Redeem Discount</div>
-        <div style="font-size:11px;color:var(--ink4);font-family:var(--mono)">${pts % threshold}/${threshold} pts</div>
-      </div>
-      <div class="pts-progress-wrap"><div class="pts-progress" style="width:${progress}%"></div></div>
-      <div style="font-size:11px;color:var(--ink4);margin-bottom:12px">
-        ${canRedeem ? `🎉 You can redeem <b>${Math.floor(pts/threshold)*discount} MVR</b> discount!` : `${threshold - (pts % threshold)} more points for <b>${discount} MVR</b> off`}
-      </div>
-      <button class="pts-redeem-btn" ${canRedeem?'':'disabled'} onclick="redeemPoints()">
-        <i class="fa fa-gift"></i> Redeem ${Math.floor(pts/threshold)*discount} MVR Discount
-      </button>
-    </div>
+  // Build stats html
+  const ordersEarned = historyItems.filter(function(x){ return x.type==='earn' && (x.desc||'').includes('Order'); }).length;
 
-    <!-- How to Earn -->
-    <div class="pts-earn-list">
-      <div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">How to Earn Points</div>
-      <div class="pts-earn-row">
-        <div class="pts-earn-icon" style="background:#f0fff0"><span style="font-size:18px">🎉</span></div>
-        <div class="pts-earn-info"><div class="pts-earn-title">Create Account</div><div class="pts-earn-sub">One-time welcome bonus</div></div>
-        <div class="pts-earn-pts">+${pointsConfig.signupPoints||100} pts</div>
-      </div>
-      <div class="pts-earn-row">
-        <div class="pts-earn-icon" style="background:#fff8f0"><span style="font-size:18px">🛒</span></div>
-        <div class="pts-earn-info"><div class="pts-earn-title">Place an Order</div><div class="pts-earn-sub">${pointsConfig.orderPointsRate||10} pts per MVR spent</div></div>
-        <div class="pts-earn-pts">+${pointsConfig.orderPointsRate||10} pts/MVR</div>
-      </div>
-      <div class="pts-earn-row">
-        <div class="pts-earn-icon" style="background:#f5f0ff"><span style="font-size:18px">👥</span></div>
-        <div class="pts-earn-info"><div class="pts-earn-title">Refer a Friend to ZentoShop</div><div class="pts-earn-sub">Both you and your friend get bonus points</div></div>
-        <div class="pts-earn-pts">+${pointsConfig.referralPoints||50} pts</div>
-      </div>
-    </div>
+  el.innerHTML =
+    '<div class="pts-hero">'
+    + '<div class="pts-badge"><i class="fa fa-star"></i> ZentoShop REWARDS</div>'
+    + '<div class="pts-amount">' + pts.toLocaleString() + '</div>'
+    + '<div class="pts-label">POINTS BALANCE</div>'
+    + '<div class="pts-equiv">= <span>' + (Math.floor(pts/threshold)*discount) + ' MVR</span> discount value</div>'
+    + '</div>'
 
-    <!-- Referral Box -->
-    <div class="ref-box">
-      <div class="ref-title">👥 Invite Friends to ZentoShop</div>
-      <div class="ref-sub">Share your code — when a friend signs up on ZentoShop using your code, you both earn ${pointsConfig.referralPoints||50} bonus points! 🎁</div>
-      <div style="text-align:center;margin-bottom:12px">
-        <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:2px;margin-bottom:8px">YOUR REFERRAL CODE</div>
-        <div onclick="copyRefCode('${refCode}')" style="cursor:pointer;background:rgba(192,132,252,.15);border:2px dashed rgba(192,132,252,.5);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all .2s" onmouseenter="this.style.background='rgba(192,132,252,.25)'" onmouseleave="this.style.background='rgba(192,132,252,.15)'">
-          <div class="ref-code" style="font-size:26px;letter-spacing:4px">${refCode}</div>
-          <div style="background:#c084fc;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;color:#000;display:flex;align-items:center;gap:5px;flex-shrink:0"><i class="fa fa-copy"></i> TAP TO COPY</div>
-        </div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">Share this code with friends — they enter it at checkout to get a discount, and you earn points!</div>
-      </div>
-      <div class="ref-stats">
-        <div class="ref-stat"><div class="ref-stat-val">${CU.referralCount||0}</div><div class="ref-stat-lbl">FRIENDS JOINED</div></div>
-        <div class="ref-stat"><div class="ref-stat-val">${(CU.referralCount||0)*( pointsConfig.referralPoints||50)}</div><div class="ref-stat-lbl">POINTS EARNED</div></div>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="ref-share-btn" style="flex:1;justify-content:center;background:#25d366" onclick="shareWhatsApp('${shareText}','${shareUrl}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
-        <button class="ref-share-btn" style="flex:1;justify-content:center;background:#7360f2" onclick="shareViber('${shareText}','${shareUrl}')"><i class="fab fa-viber"></i> Viber</button>
-      </div>
-      <button class="ref-share-btn" style="width:100%;justify-content:center;margin-top:8px;background:rgba(150,100,255,.2);color:#c084fc" onclick="copyRefLink('${shareUrl}')"><i class="fa fa-link"></i> Copy Referral Link</button>
-    </div>
+    + '<div class="pts-grid">'
+    + '<div class="pts-card"><div class="pts-card-icon">\u{1F465}</div><div class="pts-card-val">' + (CU.referralCount||0) + '</div><div class="pts-card-lbl">Friends Referred</div></div>'
+    + '<div class="pts-card"><div class="pts-card-icon">\u{1F6D2}</div><div class="pts-card-val">' + ordersEarned + '</div><div class="pts-card-lbl">Orders Earned</div></div>'
+    + '</div>'
 
-    <!-- Points History -->
-    <div class="pts-history">
-      <div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">Points History</div>
-      ${history.length ? history.map(h=>`
-        <div class="pts-hist-row">
-          <div><div class="pts-hist-desc">${h.desc||'—'}</div><div class="pts-hist-date">${h.date?new Date(h.date).toLocaleDateString('en-MV',{month:'short',day:'numeric',year:'numeric'}):'—'}</div></div>
-          <div class="pts-hist-amt ${h.type||'earn'}">${h.type==='use'?'-':'+'}${h.points||0} pts</div>
-        </div>`).join('') : '<div class="empty" style="padding:20px"><i class="fa fa-history"></i><p>No history yet</p></div>'}
-    </div>
-  `;
+    + '<div class="pts-discount-bar">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    + '<div style="font-size:13px;font-weight:700">Redeem Discount</div>'
+    + '<div style="font-size:11px;color:var(--ink4);font-family:var(--mono)">' + (pts%threshold) + '/' + threshold + ' pts</div>'
+    + '</div>'
+    + '<div class="pts-progress-wrap"><div class="pts-progress" style="width:' + progress + '%"></div></div>'
+    + '<div style="font-size:11px;color:var(--ink4);margin-bottom:12px">'
+    + (canRedeem ? '\u{1F389} You can redeem <b>' + (Math.floor(pts/threshold)*discount) + ' MVR</b> discount!' : (threshold-(pts%threshold)) + ' more points for <b>' + discount + ' MVR</b> off')
+    + '</div>'
+    + '<button class="pts-redeem-btn" ' + (canRedeem ? '' : 'disabled') + ' onclick="redeemPoints()">'
+    + '<i class="fa fa-gift"></i> Redeem ' + (Math.floor(pts/threshold)*discount) + ' MVR Discount'
+    + '</button>'
+    + '</div>'
+
+    + '<div class="pts-earn-list">'
+    + '<div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">How to Earn Points</div>'
+    + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#f0fff0"><span style="font-size:18px">\u{1F389}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Create Account</div><div class="pts-earn-sub">One-time welcome bonus</div></div><div class="pts-earn-pts">+' + (pointsConfig.signupPoints||100) + ' pts</div></div>'
+    + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#fff8f0"><span style="font-size:18px">\u{1F6D2}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Place an Order</div><div class="pts-earn-sub">' + (pointsConfig.orderPointsRate||10) + ' pts per MVR spent</div></div><div class="pts-earn-pts">+' + (pointsConfig.orderPointsRate||10) + ' pts/MVR</div></div>'
+    + '<div class="pts-earn-row"><div class="pts-earn-icon" style="background:#f5f0ff"><span style="font-size:18px">\u{1F465}</span></div><div class="pts-earn-info"><div class="pts-earn-title">Refer a Friend to ZentoShop</div><div class="pts-earn-sub">Both you and your friend get bonus points</div></div><div class="pts-earn-pts">+' + (pointsConfig.referralPoints||50) + ' pts</div></div>'
+    + '</div>'
+
+    + '<div class="ref-box">'
+    + '<div class="ref-title">\u{1F465} Invite Friends to ZentoShop</div>'
+    + '<div class="ref-sub">Share your code \u2014 when a friend signs up using your code, you both earn ' + (pointsConfig.referralPoints||50) + ' bonus points! \u{1F381}</div>'
+    + '<div style="text-align:center;margin-bottom:12px">'
+    + '<div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:2px;margin-bottom:8px">YOUR REFERRAL CODE</div>'
+    + '<div id="rw-code-box" style="cursor:pointer;background:rgba(192,132,252,.15);border:2px dashed rgba(192,132,252,.5);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all .2s">'
+    + '<div class="ref-code" style="font-size:26px;letter-spacing:4px">' + window._rwRefCode + '</div>'
+    + '<div style="background:#c084fc;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;color:#000;display:flex;align-items:center;gap:5px;flex-shrink:0"><i class="fa fa-copy"></i> TAP TO COPY</div>'
+    + '</div>'
+    + '<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">Tap the box above to copy your code</div>'
+    + '</div>'
+    + '<div class="ref-stats">'
+    + '<div class="ref-stat"><div class="ref-stat-val">' + (CU.referralCount||0) + '</div><div class="ref-stat-lbl">FRIENDS JOINED</div></div>'
+    + '<div class="ref-stat"><div class="ref-stat-val">' + ((CU.referralCount||0)*(pointsConfig.referralPoints||50)) + '</div><div class="ref-stat-lbl">POINTS EARNED</div></div>'
+    + '</div>'
+    + '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">'
+    + '<button id="rw-wa-btn" class="ref-share-btn" style="flex:1;justify-content:center;background:#25d366"><i class="fab fa-whatsapp"></i> WhatsApp</button>'
+    + '<button id="rw-vb-btn" class="ref-share-btn" style="flex:1;justify-content:center;background:#7360f2"><i class="fab fa-viber"></i> Viber</button>'
+    + '<button id="rw-tg-btn" class="ref-share-btn" style="flex:1;justify-content:center;background:#2aabee"><i class="fab fa-telegram-plane"></i> Telegram</button>'
+    + '</div>'
+    + '<button id="rw-link-btn" class="ref-share-btn" style="width:100%;justify-content:center;margin-top:8px;background:rgba(150,100,255,.2);color:#c084fc"><i class="fa fa-link"></i> Copy Referral Link</button>'
+    + '</div>'
+
+    + '<div class="pts-history">'
+    + '<div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">Points History</div>'
+    + historyHtml
+    + '</div>';
+
+  // Attach handlers AFTER innerHTML — no inline onclick issues
+  const codeBox = document.getElementById('rw-code-box');
+  if (codeBox) codeBox.onclick = function() {
+    navigator.clipboard.writeText(window._rwRefCode)
+      .then(function(){ notify('Code copied: ' + window._rwRefCode + ' \u2713'); })
+      .catch(function(){ notify('Copy failed \u2014 try long-press', 'err'); });
+  };
+
+  const waBtn = document.getElementById('rw-wa-btn');
+  if (waBtn) waBtn.onclick = function() {
+    window.open('https://wa.me/?text=' + encodeURIComponent(window._rwShareText + '\n' + window._rwShareUrl), '_blank');
+  };
+
+  const vbBtn = document.getElementById('rw-vb-btn');
+  if (vbBtn) vbBtn.onclick = function() {
+    window.open('viber://forward?text=' + encodeURIComponent(window._rwShareText + '\n' + window._rwShareUrl), '_blank');
+  };
+
+  const tgBtn = document.getElementById('rw-tg-btn');
+  if (tgBtn) tgBtn.onclick = function() {
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(window._rwShareUrl) + '&text=' + encodeURIComponent(window._rwShareText), '_blank');
+  };
+
+  const linkBtn = document.getElementById('rw-link-btn');
+  if (linkBtn) linkBtn.onclick = function() {
+    navigator.clipboard.writeText(window._rwShareUrl)
+      .then(function(){ notify('Referral link copied! \u2713'); })
+      .catch(function(){ notify('Copy failed', 'err'); });
+  };
 }
 
 async function redeemPoints() {
@@ -1925,7 +1950,7 @@ async function applyRefCode() {
   // Check if already applied
   if (appliedRefCode?.code === code) { notify('Code already applied ✓'); return; }
 
-  const btn = document.querySelector('[onclick="applyRefCode()"]');
+  const btn = document.getElementById('co-apply-btn');
   if (btn) { btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; btn.disabled = true; }
 
   try {
@@ -2013,6 +2038,9 @@ function shareWhatsApp(text, url) {
 }
 function shareViber(text, url) {
   window.open('viber://forward?text=' + encodeURIComponent(text + '\n' + url), '_blank');
+}
+function shareTelegram(text, url) {
+  window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '_blank');
 }
 
 /* ════════════════════════════
