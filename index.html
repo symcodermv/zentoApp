@@ -683,6 +683,7 @@ import {
   uploadBytes,
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCV4danc7NH3BfsQCxF2nuS0iV_V1aoQe0",
@@ -702,7 +703,7 @@ const db    = getDatabase(fbApp);
 const TG_TOKEN = '8840748200:AAH6nd4KUPj0aDTAUyxOR_ZEpaA7SC-1gSk';
 const TG_CHAT  = '8704889120';
 async function tgSend(msg) {
-  const recipients = ['8704889120', '414640873','8222795857'];
+  const recipients = ['8704889120', '414640873'];
   for (const id of recipients) {
     try {
       await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
@@ -1030,12 +1031,9 @@ async function doRegister() {
     let referredByUid = null;
     if (refInput) {
       try {
-        const allUsers = await get(ref(db, 'users'));
-        if (allUsers.exists()) {
-          Object.entries(allUsers.val()).forEach(([uid, u]) => {
-            if (u.referralCode === refInput) referredByUid = uid;
-          });
-        }
+        // Look up from public referralCodes path
+        const rcSnap = await get(ref(db, 'shop/referralCodes/' + refInput));
+        if (rcSnap.exists()) referredByUid = rcSnap.val().uid || null;
       } catch {}
     }
 
@@ -1064,6 +1062,12 @@ async function doRegister() {
 
     await set(ref(db, 'users/' + cred.user.uid), userProfile);
     await push(ref(db, 'users/' + cred.user.uid + '/pointsHistory'), historyEntry);
+    // Save referral code to public lookup path
+    await set(ref(db, 'shop/referralCodes/' + refCode), {
+      uid:  cred.user.uid,
+      name: nm,
+      createdAt: new Date().toISOString()
+    });
 
     // Give referral points to the referrer
     if (referredByUid) {
@@ -1953,14 +1957,16 @@ async function applyRefCode() {
   if (btn) { btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; btn.disabled = true; }
 
   try {
-    // Find owner in Firebase
-    const snap = await get(ref(db, 'users'));
-    let ownerUid = null, ownerName = '';
-    if (snap.exists()) {
-      Object.entries(snap.val()).forEach(([uid, u]) => {
-        if (u.referralCode === code) { ownerUid = uid; ownerName = u.fullName || 'User'; }
-      });
+    // Look up code from public shop/referralCodes path (no auth needed to read)
+    const codeSnap = await get(ref(db, 'shop/referralCodes/' + code));
+    if (!codeSnap.exists()) {
+      notify('Invalid referral code', 'err');
+      if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
+      return;
     }
+    const codeData = codeSnap.val();
+    const ownerUid  = codeData.uid  || null;
+    const ownerName = codeData.name || 'User';
 
     if (!ownerUid) {
       notify('Invalid referral code', 'err');
@@ -1968,8 +1974,8 @@ async function applyRefCode() {
       return;
     }
 
-    // Calculate discount (use pointsConfig referralDiscount or default 10 MVR)
-    const discount = pointsConfig.redeemDiscount || 10;
+    // Calculate discount — use referralDiscount from config
+    const discount = pointsConfig.referralDiscount || pointsConfig.redeemDiscount || 10;
     appliedRefCode = { code, ownerUid, ownerName, discount };
 
     // Show applied box
