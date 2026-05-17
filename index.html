@@ -370,6 +370,65 @@ textarea.inp{resize:vertical;min-height:72px}
 /* Loading overlay for auth */
 .auth-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:13px;color:var(--ink3)}
 .auth-loading .spinner{width:18px;height:18px;border-width:2px}
+
+/* ══ POINTS & REWARDS ══ */
+.pts-hero{background:linear-gradient(135deg,#1a3a1a 0%,#0d2b0d 60%,#1a2e00 100%);border-radius:20px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.pts-hero::before{content:'';position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(200,240,67,.15) 0%,transparent 70%);border-radius:50%}
+.pts-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(200,240,67,.12);border:1px solid rgba(200,240,67,.3);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--lime);letter-spacing:1px;margin-bottom:12px;font-family:var(--mono)}
+.pts-amount{font-size:52px;font-weight:900;color:var(--lime);letter-spacing:-3px;line-height:1}
+.pts-label{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;font-family:var(--mono);letter-spacing:1px}
+.pts-equiv{font-size:13px;color:rgba(255,255,255,.7);margin-top:8px}
+.pts-equiv span{color:var(--lime);font-weight:700}
+.pts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.pts-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.pts-card-icon{font-size:22px;margin-bottom:6px}
+.pts-card-val{font-size:18px;font-weight:900;color:var(--ink)}
+.pts-card-lbl{font-size:10px;color:var(--ink4);font-family:var(--mono);margin-top:2px}
+.pts-earn-list{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.pts-earn-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border)}
+.pts-earn-row:last-child{border:none}
+.pts-earn-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pts-earn-info{flex:1}
+.pts-earn-title{font-size:13px;font-weight:600;color:var(--ink)}
+.pts-earn-sub{font-size:11px;color:var(--ink4);margin-top:1px}
+.pts-earn-pts{font-size:13px;font-weight:800;color:var(--lime);font-family:var(--mono)}
+.pts-history{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.pts-hist-row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px}
+.pts-hist-row:last-child{border:none}
+.pts-hist-desc{color:var(--ink);font-weight:500}
+.pts-hist-date{color:var(--ink4);font-size:10px;margin-top:2px}
+.pts-hist-amt{font-weight:800;font-family:var(--mono)}
+.pts-hist-amt.earn{color:var(--lime)}
+.pts-hist-amt.use{color:var(--coral)}
+.ref-box{background:linear-gradient(135deg,#0d1a2e,#1a0d2e);border-radius:16px;padding:18px;margin-bottom:16px;border:1.5px solid rgba(150,100,255,.3)}
+.ref-title{font-size:14px;font-weight:800;color:#c084fc;margin-bottom:4px}
+.ref-sub{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:14px}
+.ref-code-box{background:rgba(255,255,255,.07);border:1.5px dashed rgba(150,100,255,.4);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ref-code{font-size:18px;font-weight:900;color:#c084fc;font-family:var(--mono);letter-spacing:3px}
+.ref-share-btn{background:#c084fc;color:#000;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.ref-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ref-stat{background:rgba(255,255,255,.06);border-radius:10px;padding:10px;text-align:center}
+.ref-stat-val{font-size:18px;font-weight:900;color:#c084fc}
+.ref-stat-lbl{font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono);margin-top:2px}
+.pts-discount-bar{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.pts-progress-wrap{background:var(--bg2);border-radius:20px;height:10px;overflow:hidden;margin:10px 0}
+.pts-progress{height:100%;background:linear-gradient(90deg,var(--lime),#a8e63d);border-radius:20px;transition:width .6s ease}
+.pts-redeem-btn{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--lime),#a8e63d);color:#000;font-weight:900;font-size:14px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.pts-redeem-btn:disabled{opacity:.4;cursor:not-allowed}
+/* Referral field in auth */
+.ref-inp-wrap{position:relative}
+.ref-inp-tag{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:9px;font-weight:700;background:var(--lime);color:#000;padding:2px 6px;border-radius:4px}
+
+
+.ref-code-apply{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-top:14px}
+.ref-code-apply-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ref-code-row{display:flex;gap:8px;align-items:center}
+.ref-code-row input{flex:1;text-transform:uppercase;letter-spacing:2px;font-family:var(--mono);font-size:13px;font-weight:700}
+.ref-applied-box{background:rgba(200,240,67,.1);border:1.5px solid rgba(200,240,67,.4);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:8px}
+.ref-applied-icon{width:30px;height:30px;background:var(--lime);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000;font-size:13px;font-weight:900;flex-shrink:0}
+.ref-applied-text{flex:1;font-size:12px;font-weight:600;color:var(--ink)}
+.ref-applied-disc{font-size:14px;font-weight:900;color:var(--lime);font-family:var(--mono)}
+.ref-applied-remove{background:none;border:none;color:var(--ink4);cursor:pointer;font-size:13px;padding:4px}
 </style>
 </head>
 <body>
@@ -402,6 +461,7 @@ textarea.inp{resize:vertical;min-height:72px}
     <div class="sb-sec">Account</div>
     <button class="sb-btn" data-p="favorites"  onclick="nav('favorites');closeSB()"><i class="fa fa-heart"></i> My Favorites</button>
     <button class="sb-btn" data-p="orders"     onclick="nav('orders');closeSB()"><i class="fa fa-shopping-bag"></i> My Orders</button>
+    <button class="sb-btn" data-p="rewards"    onclick="nav('rewards');closeSB()"><i class="fa fa-star" style="color:#c8f043"></i> Rewards & Points</button>
     <button class="sb-btn" data-p="account"    onclick="nav('account');closeSB()"><i class="fa fa-user-cog"></i> Account</button>
     <button class="sb-btn"                     onclick="showMap();closeSB()"><i class="fa fa-map-marker-alt"></i> Store Location</button>
     <button class="sb-btn" data-p="contact"    onclick="nav('contact');closeSB()"><i class="fa fa-phone"></i> Contact Us</button>
@@ -484,7 +544,12 @@ textarea.inp{resize:vertical;min-height:72px}
 
   <div class="page" id="pg-account"><div class="sec-hdr" style="margin-bottom:20px"><div class="sec-title">Account</div></div><div id="acct-body"></div></div>
 
-  <div class="page" id="pg-contact">
+  <div class="page" id="pg-rewards">
+  <div class="sec-hdr" style="margin-bottom:20px"><div class="sec-title">Rewards</div></div>
+  <div id="rewards-body"></div>
+</div>
+
+<div class="page" id="pg-contact">
     <div class="sec-hdr" style="margin-bottom:20px"><div class="sec-title">Contact Us</div></div>
     <div class="contact-grid">
       <div class="contact-card" id="ct-phone-card"><div class="contact-icon"><i class="fa fa-phone-alt"></i></div><div class="contact-lbl">Call Us</div><div class="contact-val" id="ct-phone">+960 7468757</div></div>
@@ -538,6 +603,7 @@ textarea.inp{resize:vertical;min-height:72px}
         <div class="frow" style="margin:0"><label class="lbl">Password</label><input class="inp" id="r-pw" type="password" placeholder="Min 6 chars"></div>
         <div class="frow" style="margin:0"><label class="lbl">Confirm</label><input class="inp" id="r-cp" type="password" placeholder="Repeat"></div>
       </div>
+      <div class="frow" style="margin-top:8px"><label class="lbl">Referral Code <span style="color:var(--lime);font-size:9px;font-weight:700">+50 POINTS</span></label><div class="ref-inp-wrap"><input class="inp" id="r-ref" placeholder="Have a code? Enter here" style="text-transform:uppercase"><span class="ref-inp-tag">OPTIONAL</span></div></div>
       <button class="btn btn-dark btn-full btn-lg" id="btn-register" onclick="doRegister()" style="margin-top:12px"><i class="fa fa-user-plus"></i> Create Account</button>
     </div>
   </div>
@@ -618,16 +684,16 @@ import {
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+/* ─── Your Firebase Config ─── */
 const firebaseConfig = {
-  apiKey: "AIzaSyCV4danc7NH3BfsQCxF2nuS0iV_V1aoQe0",
-  authDomain: "symcodermv-cba04.firebaseapp.com",
-  databaseURL: "https://symcodermv-cba04-default-rtdb.firebaseio.com",
-  projectId: "symcodermv-cba04",
-  storageBucket: "symcodermv-cba04.firebasestorage.app",
-  messagingSenderId: "432074388052",
-  appId: "1:432074388052:web:07ec04181e2af980b2b3c1",
-  measurementId: "G-GBHF3K1C8P"
+  apiKey:            "AIzaSyBv6VN_oLx3lv1K3WOnzqUtl59GgBMS4TM",
+  authDomain:        "zentoshop.firebaseapp.com",
+  databaseURL:       "https://zentoshop-default-rtdb.firebaseio.com",
+  projectId:         "zentoshop",
+  storageBucket:     "zentoshop.firebasestorage.app",
+  messagingSenderId: "1098429506908",
+  appId:             "1:1098429506908:web:1d301d70f1e55861164d99",
+  measurementId:     "G-N30XMZKYJP"
 };
 const fbApp = initializeApp(firebaseConfig);
 const auth  = getAuth(fbApp);
@@ -651,6 +717,13 @@ async function tgSend(msg) {
 
 /* ─── App State ─── */
 let CU = null;              // current user
+let pointsConfig = {        // loaded from Firebase, admin-managed
+  signupPoints: 100,
+  orderPointsRate: 10,      // points per MVR spent
+  referralPoints: 50,
+  redeemThreshold: 100,     // points needed for discount
+  redeemDiscount: 10        // MVR discount per 100 points
+};
 let prods = [];             // products (updated by realtime listener)
 let slides = [];            // slider
 let delivery = { minOrder: 100, deliveryFee: 150, freeThreshold: 1500, gstRate: 0 };
@@ -696,9 +769,13 @@ window.saveAcct=saveAcct; window.onUserRowClick=onUserRowClick;
         const snap = await get(child(ref(db), `users/${user.uid}`));
         const p = snap.exists() ? snap.val() : {};
         CU = {
-          uid:      user.uid,
-          email:    user.email,
-          fullName: p.fullName || user.displayName || user.email.split('@')[0],
+          uid:            user.uid,
+          email:          user.email,
+          fullName:       p.fullName || user.displayName,
+          points:         p.points || 0,
+          referralCode:   p.referralCode || '',
+          referralCount:  p.referralCount || 0,
+          pendingDiscount: p.pendingDiscount || 0,
           phone:    p.phone || ''
         };
       } catch {
@@ -743,6 +820,11 @@ function attachRealtimeListeners() {
     }
     appReady = true;
   }, err => { prods = fallbackProds(); appReady = true; renderHome(); });
+
+  // ── Points Config (admin-managed) ──
+  onValue(ref(db, 'shop/pointsConfig'), snap => {
+    if (snap.exists()) pointsConfig = { ...pointsConfig, ...snap.val() };
+  });
 
   // ── Weekly Specials (live from admin) ──
   onValue(ref(db, 'shop/weeklySpecials'), snap => {
@@ -936,14 +1018,64 @@ async function doRegister() {
     await updateProfile(cred.user, { displayName: nm });
 
     // Step 3: Save extended profile to Realtime DB
+    // Generate unique referral code
+    const refCode = 'ZT-' + cred.user.uid.slice(0,6).toUpperCase();
+    const refInput = ($('r-ref')?.value||'').trim().toUpperCase();
+
+    // Check if referral code is valid
+    let referredByUid = null;
+    if (refInput) {
+      try {
+        const allUsers = await get(ref(db, 'users'));
+        if (allUsers.exists()) {
+          Object.entries(allUsers.val()).forEach(([uid, u]) => {
+            if (u.referralCode === refInput) referredByUid = uid;
+          });
+        }
+      } catch {}
+    }
+
+    // Signup points (from admin config, default 100)
+    const signupPts = pointsConfig.signupPoints || 100;
+    const refPts    = pointsConfig.referralPoints || 50;
+
     const userProfile = {
-      fullName:  nm,
-      phone:     ph || '',
-      email:     em,
-      uid:       cred.user.uid,
-      createdAt: new Date().toISOString()
+      fullName:     nm,
+      phone:        ph || '',
+      email:        em,
+      uid:          cred.user.uid,
+      referralCode: refCode,
+      referredBy:   referredByUid || null,
+      referralCount: 0,
+      points:       signupPts + (referredByUid ? refPts : 0),
+      createdAt:    new Date().toISOString()
     };
+
+    const historyEntry = {
+      desc: '🎉 Welcome bonus — Account created',
+      points: signupPts,
+      type: 'earn',
+      date: new Date().toISOString()
+    };
+
     await set(ref(db, 'users/' + cred.user.uid), userProfile);
+    await push(ref(db, 'users/' + cred.user.uid + '/pointsHistory'), historyEntry);
+
+    // Give referral points to the referrer
+    if (referredByUid) {
+      const referrerSnap = await get(ref(db, 'users/' + referredByUid));
+      if (referrerSnap.exists()) {
+        const referrer = referrerSnap.val();
+        await update(ref(db, 'users/' + referredByUid), {
+          points: (referrer.points || 0) + refPts,
+          referralCount: (referrer.referralCount || 0) + 1
+        });
+        await push(ref(db, 'users/' + referredByUid + '/pointsHistory'), {
+          desc: `👥 ${nm} joined using your referral code`,
+          points: refPts, type: 'earn', date: new Date().toISOString()
+        });
+      }
+    }
 
     closeModal('ov-auth');
 
@@ -951,10 +1083,11 @@ async function doRegister() {
     await tgSend(
       `👤 <b>New Account Created</b>\n\n` +
       `Name: <b>${nm}</b>\nEmail: ${em}\nPhone: ${ph || '—'}\n` +
+      `🎁 Signup Points: +${signupPts}` + (referredByUid ? `\n👥 Referred by code: ${refInput}` : '') + `\n` +
       `🕐 ${new Date().toLocaleString('en-MV')}`
     );
 
-    notify('Account created! Welcome 🎉');
+    notify('Account created! Welcome 🎉 You earned ' + signupPts + ' points!');
   } catch (e) {
     let msg = e.message || 'Registration failed';
     if (e.code === 'auth/email-already-in-use')  msg = 'This email is already registered. Please login.';
@@ -990,6 +1123,18 @@ function updateUserUI() {
 function switchTab(t) {
   document.querySelectorAll('.auth-tab').forEach((el,i) => el.classList.toggle('on', (t==='login'&&i===0)||(t!=='login'&&i===1)));
   document.querySelectorAll('.auth-panel').forEach((el,i) => el.classList.toggle('on', (t==='login'&&i===0)||(t!=='login'&&i===1)));
+  // Auto-fill referral code from URL param
+  if (t === 'register') {
+    const pending = sessionStorage.getItem('pendingRef');
+    if (pending) {
+      const refInp = $('r-ref');
+      if (refInp && !refInp.value) {
+        refInp.value = pending;
+        refInp.style.borderColor = 'var(--lime)';
+        refInp.style.background = 'rgba(200,240,67,.05)';
+      }
+    }
+  }
 }
 
 /* ════════════════════════════
@@ -1022,7 +1167,7 @@ function setView(v) {
    NAVIGATION
 ════════════════════════════ */
 function nav(page) {
-  if (['favorites','orders','account','checkout'].includes(page) && !CU) { openAuth(); return; }
+  if (['favorites','orders','account','checkout','rewards'].includes(page) && !CU) { openAuth(); return; }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   $('pg-'+page)?.classList.add('on');
   document.querySelectorAll('[data-p]').forEach(b => { b.classList.remove('on'); if (b.dataset.p===page) b.classList.add('on'); });
@@ -1035,6 +1180,7 @@ function nav(page) {
     orders: renderOrders,
     sale: renderSale,
     favorites: renderFavs,
+    rewards: renderRewards,
     account: renderAccount
   };
   if (renders[page]) renders[page]();
@@ -1128,7 +1274,7 @@ function prodCard(p) {
   const nameHtml = isDv && p.name_dv
     ? `<span style="font-family:'MvMAG',serif;direction:rtl;unicode-bidi:bidi-override;display:block;font-size:14px;font-weight:900;line-height:1.4;color:var(--ink)">${p.name_dv}</span><span style="font-size:10px;color:var(--ink4);display:block;margin-top:1px">${p.name}</span>`
     : `${p.name}${p.name_dv?`<span class="prod-name-dv">${p.name_dv}</span>`:''}`;
-  const hasSale = p.original_price && p.original_price > p.price;
+  const hasSale = p.showSale && p.original_price && p.original_price > p.price;
   const salePct = hasSale ? Math.round((1-p.price/p.original_price)*100) : 0;
   return `<div class="prod-card${isOutOfStock?' prod-oos':''}">
     <div class="prod-img" onclick="showProd('${p.id}')">
@@ -1159,7 +1305,7 @@ function prodCard(p) {
 function prodListCard(p) {
   const isFav=favs.includes(String(p.id));
   const isOutOfStock=p.stock<=0;
-  const hasSale2=p.original_price&&p.original_price>p.price;
+  const hasSale2=p.showSale&&p.original_price&&p.original_price>p.price;
   const salePct2=hasSale2?Math.round((1-p.price/p.original_price)*100):0;
   const isDv = curLang==='dv';
   const mainName = isDv && p.name_dv
@@ -1175,7 +1321,7 @@ function prodListCard(p) {
       <div class="prod-list-btm">
         <div>
           <div class="prod-list-price">${mvr(p.price)}</div>
-          ${(p.original_price&&p.original_price>p.price)?`<div class="prod-list-was">${mvr(p.original_price)}</div>`:''}
+          ${(p.showSale&&p.original_price&&p.original_price>p.price)?`<div class="prod-list-was">${mvr(p.original_price)}</div>`:''}
           ${isOutOfStock?'<div style="font-size:10px;color:var(--coral);margin-top:2px">● Out of Stock</div>':''}
           ${!isOutOfStock&&p.stock<=20?`<div style="font-size:10px;color:var(--coral);margin-top:2px">● Only ${p.stock} left</div>`:''}
         </div>
@@ -1203,7 +1349,7 @@ function showProd(id) {
     ${nameHtml}
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
       <div style="font-size:26px;font-weight:900;letter-spacing:-1px">${mvr(p.price)}</div>
-      ${(p.original_price&&p.original_price>p.price)?`<div style="font-size:14px;color:var(--ink4);text-decoration:line-through">${mvr(p.original_price)}</div>`:''}
+      ${(p.showSale&&p.original_price&&p.original_price>p.price)?`<div style="font-size:14px;color:var(--ink4);text-decoration:line-through">${mvr(p.original_price)}</div>`:''}
     </div>
     <div style="font-size:13px;color:var(--ink3);line-height:1.7;margin-bottom:14px">${p.description||''}</div>
     <div style="display:flex;gap:10px;margin-top:4px">
@@ -1264,7 +1410,9 @@ function renderCart() {
       <div class="ord-row"><span>Subtotal</span><span>${mvr(sub)}</span></div>
       <div class="ord-row"><span>Delivery</span><span>${ship===0?'FREE ✓':mvr(ship)}</span></div>
       <div class="ord-row"><span>GST ${delivery.gstRate>0?`(${Math.round(delivery.gstRate*100)}%)`:"(0%)"}</span><span>${mvr(tax)}</span></div>
-      <div class="ord-row big"><span>Total</span><span>${mvr(tot)}</span></div>
+      ${CU?.pendingDiscount>0?`<div class="ord-row" style="color:var(--lime);font-weight:700"><span>🎁 Points Discount</span><span>- ${mvr(CU.pendingDiscount)}</span></div>`:''}
+      <div class="ord-row big"><span>Total</span><span>${mvr(Math.max(0,tot-(CU?.pendingDiscount||0)))}</span></div>
+      ${CU?.pendingDiscount>0?`<div style="font-size:11px;color:var(--lime);text-align:center;margin-top:2px">🎁 ${mvr(CU.pendingDiscount)} points discount active!</div>`:''}
       <button class="btn btn-lime btn-full btn-lg" style="margin-top:14px" onclick="nav('checkout')"><i class="fa fa-lock"></i> Checkout</button>
       <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="nav('products')">Continue Shopping</button>
     </div>`;
@@ -1329,8 +1477,27 @@ function renderCheckout() {
         <div class="ord-row"><span>Subtotal</span><span>${mvr(sub)}</span></div>
         <div class="ord-row"><span>Delivery</span><span>${ship===0?'FREE':mvr(ship)}</span></div>
         <div class="ord-row"><span>GST ${delivery.gstRate>0?`(${Math.round(delivery.gstRate*100)}%)`:"(0%)"}</span><span>${mvr(tax)}</span></div>
-        <div class="ord-row big"><span>Total</span><span>${mvr(tot)}</span></div>
-        <button class="btn btn-lime btn-full btn-lg" style="margin-top:14px" onclick="placeOrder(${tot})"><i class="fa fa-check-circle"></i> Place Order</button>
+        ${CU?.pendingDiscount>0?`<div class="ord-row" style="color:var(--lime);font-weight:700"><span>🎁 Points Discount</span><span>- ${mvr(CU.pendingDiscount)}</span></div>`:''}
+        <div id="ref-disc-row" style="display:none" class="ord-row"><span style="color:var(--lime);font-weight:700">🏷️ Referral Discount</span><span id="ref-disc-amt" style="color:var(--lime);font-weight:700"></span></div>
+        <div class="ord-row big"><span>Total</span><span id="co-total-display">${mvr(Math.max(0,tot-(CU?.pendingDiscount||0)))}</span></div>
+
+        <!-- ── Referral Code Box ── -->
+        <div class="ref-code-apply">
+          <div class="ref-code-apply-title"><i class="fa fa-ticket-alt" style="color:var(--lime)"></i> Have a referral code?</div>
+          <div class="ref-code-row">
+            <input class="inp" id="co-ref-inp" placeholder="e.g. ZT-O61U2D" maxlength="12" oninput="this.value=this.value.toUpperCase()">
+            <button class="btn btn-lime btn-sm" onclick="applyRefCode()" style="white-space:nowrap;padding:10px 16px"><i class="fa fa-check"></i> Apply</button>
+          </div>
+          <div class="ref-applied-box" id="ref-applied-box" style="display:none">
+            <div class="ref-applied-icon"><i class="fa fa-star"></i></div>
+            <div style="flex:1"><div class="ref-applied-text" id="ref-applied-text">Code applied!</div><div style="font-size:10px;color:var(--ink4);margin-top:2px" id="ref-applied-sub"></div></div>
+            <div class="ref-applied-disc" id="ref-applied-disc"></div>
+            <button class="ref-applied-remove" onclick="removeRefCode()" title="Remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+
+        ${CU?.pendingDiscount>0?`<div style="background:rgba(200,240,67,.1);border:1px solid rgba(200,240,67,.3);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--lime);margin-top:8px;display:flex;align-items:center;gap:6px"><i class="fa fa-gift"></i> ${mvr(CU.pendingDiscount)} points discount active</div>`:''}
+        <button class="btn btn-lime btn-full btn-lg" style="margin-top:10px" onclick="placeOrder(${Math.max(0,tot-(CU?.pendingDiscount||0))})"><i class="fa fa-check-circle"></i> Place Order</button>
         <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="nav('cart')"><i class="fa fa-arrow-left"></i> Back</button>
       </div>
     </div>`;
@@ -1370,10 +1537,16 @@ function placeOrder(tot) {
   const sub=items.reduce((s,i)=>s+i.price*i.quantity,0);
   const ship=sub>=delivery.freeThreshold?0:delivery.deliveryFee;
   const tax=sub*delivery.gstRate;
+  const refDsc = appliedRefCode?.discount || 0;
+  const finalTot = Math.max(0, tot - refDsc);
   pendingOrder={customer:{fullName:nm,phone:ph,email:em,address:fullAddr,instructions:$('co-ins')?.value||''},
-    items,subtotal:sub,shipping:ship,tax,total:tot,
-    status:'pending',paymentStatus:'pending_review',paymentMethod:'bank_transfer'};
-  $('bank-amt').textContent=tot.toFixed(2); applyBankUI(); rmFile(); openModal('ov-bank');
+    items,subtotal:sub,shipping:ship,tax,total:finalTot,
+    status:'pending',paymentStatus:'pending_review',paymentMethod:'bank_transfer',
+    referralCodeUsed: appliedRefCode?.code || null,
+    referralOwnerUid: appliedRefCode?.ownerUid || null,
+    referralDiscount: refDsc
+  };
+  $('bank-amt').textContent=finalTot.toFixed(2); applyBankUI(); rmFile(); openModal('ov-bank');
 }
 
 async function confirmPay() {
@@ -1434,6 +1607,53 @@ async function confirmPay() {
     `🕐 ${new Date().toLocaleString('en-MV', {timeZone:'Indian/Maldives',hour12:true})}`;
   await tgSend(tgMsg);
 
+  // ── Award order points to buyer ──
+  if (CU) {
+    try {
+      const orderPts = Math.floor(pendingOrder.total * (pointsConfig.orderPointsRate || 10) / 100);
+      const userSnap = await get(ref(db, 'users/' + CU.uid));
+      if (userSnap.exists()) {
+        const cur = userSnap.val();
+        const newPts = (cur.points || 0) + orderPts;
+        await update(ref(db, 'users/' + CU.uid), { points: newPts });
+        await push(ref(db, 'users/' + CU.uid + '/pointsHistory'), {
+          desc: `🛒 Order #${oid} — Earned from purchase`,
+          points: orderPts, type: 'earn', date: new Date().toISOString()
+        });
+        CU.points = newPts;
+      }
+    } catch(pe) { console.warn('Points award failed', pe); }
+  }
+
+  // ── Credit referral code owner points ──
+  if (pendingOrder.referralOwnerUid) {
+    try {
+      const refPts = pointsConfig.referralPoints || 50;
+      const ownerSnap = await get(ref(db, 'users/' + pendingOrder.referralOwnerUid));
+      if (ownerSnap.exists()) {
+        const owner = ownerSnap.val();
+        const newOwnerPts = (owner.points || 0) + refPts;
+        await update(ref(db, 'users/' + pendingOrder.referralOwnerUid), {
+          points: newOwnerPts,
+          referralCount: (owner.referralCount || 0) + 1
+        });
+        await push(ref(db, 'users/' + pendingOrder.referralOwnerUid + '/pointsHistory'), {
+          desc: `🏷️ Order #${oid} used your code ${pendingOrder.referralCodeUsed}`,
+          points: refPts, type: 'earn', date: new Date().toISOString()
+        });
+      }
+    } catch(re) { console.warn('Referral credit failed', re); }
+    appliedRefCode = null; // Reset after use
+  }
+
+  // Clear pending discount after use
+  if (CU && CU.pendingDiscount > 0) {
+    try {
+      await update(ref(db, 'users/' + CU.uid), { pendingDiscount: 0 });
+      CU.pendingDiscount = 0;
+    } catch {}
+  }
+
   cart={}; saveCart(); updateBadges(); closeModal('ov-bank');
   btn.innerHTML='<i class="fa fa-check"></i> Confirm Payment'; btn.disabled=false;
 
@@ -1458,6 +1678,7 @@ async function confirmPay() {
 ════════════════════════════ */
 // Weekly specials data loaded from Firebase
 let weeklySpecials = null; // { title, deadline, productIds:[], active }
+let appliedRefCode = null; // { code, ownerUid, ownerName, discount }
 
 function renderSale() {
   let sale;
@@ -1468,7 +1689,7 @@ function renderSale() {
       .filter(p => p && p.active !== false);
   } else {
     // Fallback: products with sale price
-    sale = prods.filter(p => p.active !== false && p.original_price && p.original_price > p.price);
+    sale = prods.filter(p => p.active !== false && p.showSale && p.original_price && p.original_price > p.price);
   }
 
   // Update page title if admin set one
@@ -1546,6 +1767,255 @@ function renderOrders() {
 }
 
 /* ════════════════════════════
+   REWARDS & POINTS
+════════════════════════════ */
+async function renderRewards() {
+  if (!CU) { openAuth(); return; }
+  const el = $('rewards-body');
+  el.innerHTML = `<div class="empty"><i class="fa fa-spinner fa-spin" style="font-size:36px;opacity:.3;margin-bottom:12px;display:block"></i><p>Loading your points…</p></div>`;
+
+  // Fresh data from Firebase
+  let userData = {};
+  let history = [];
+  try {
+    const snap = await get(ref(db, 'users/' + CU.uid));
+    if (snap.exists()) {
+      const val = snap.val();
+      userData = val;
+      CU.points = val.points || 0;
+      CU.referralCode = val.referralCode || '';
+      CU.referralCount = val.referralCount || 0;
+      if (val.pointsHistory) {
+        history = Object.values(val.pointsHistory)
+          .sort((a,b) => new Date(b.date||0) - new Date(a.date||0))
+          .slice(0, 20);
+      }
+    }
+  } catch {}
+
+  const pts = CU.points || 0;
+  const threshold = pointsConfig.redeemThreshold || 100;
+  const discount  = pointsConfig.redeemDiscount  || 10;
+  const progress  = Math.min(100, Math.round((pts % threshold) / threshold * 100));
+  const canRedeem = pts >= threshold;
+  const refCode   = CU.referralCode || ('ZT-' + CU.uid.slice(0,6).toUpperCase());
+  const shareUrl  = `${window.location.origin}${window.location.pathname}?ref=${refCode}`;
+  const shareText = `🛒 Shop fresh groceries at ZentoShop! Use my referral code *${refCode}* when you sign up and we both get bonus points! 🎁`;
+
+  el.innerHTML = `
+    <!-- Points Hero -->
+    <div class="pts-hero">
+      <div class="pts-badge"><i class="fa fa-star"></i> ZentoShop REWARDS</div>
+      <div class="pts-amount">${pts.toLocaleString()}</div>
+      <div class="pts-label">POINTS BALANCE</div>
+      <div class="pts-equiv">= <span>${Math.floor(pts/threshold)*discount} MVR</span> discount value</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="pts-grid">
+      <div class="pts-card">
+        <div class="pts-card-icon">👥</div>
+        <div class="pts-card-val">${CU.referralCount || 0}</div>
+        <div class="pts-card-lbl">Friends Referred</div>
+      </div>
+      <div class="pts-card">
+        <div class="pts-card-icon">🛒</div>
+        <div class="pts-card-val">${history.filter(h=>h.type==='earn'&&h.desc.includes('Order')).length}</div>
+        <div class="pts-card-lbl">Orders Earned</div>
+      </div>
+    </div>
+
+    <!-- Redeem Progress -->
+    <div class="pts-discount-bar">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:13px;font-weight:700">Redeem Discount</div>
+        <div style="font-size:11px;color:var(--ink4);font-family:var(--mono)">${pts % threshold}/${threshold} pts</div>
+      </div>
+      <div class="pts-progress-wrap"><div class="pts-progress" style="width:${progress}%"></div></div>
+      <div style="font-size:11px;color:var(--ink4);margin-bottom:12px">
+        ${canRedeem ? `🎉 You can redeem <b>${Math.floor(pts/threshold)*discount} MVR</b> discount!` : `${threshold - (pts % threshold)} more points for <b>${discount} MVR</b> off`}
+      </div>
+      <button class="pts-redeem-btn" ${canRedeem?'':'disabled'} onclick="redeemPoints()">
+        <i class="fa fa-gift"></i> Redeem ${Math.floor(pts/threshold)*discount} MVR Discount
+      </button>
+    </div>
+
+    <!-- How to Earn -->
+    <div class="pts-earn-list">
+      <div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">How to Earn Points</div>
+      <div class="pts-earn-row">
+        <div class="pts-earn-icon" style="background:#f0fff0"><span style="font-size:18px">🎉</span></div>
+        <div class="pts-earn-info"><div class="pts-earn-title">Create Account</div><div class="pts-earn-sub">One-time welcome bonus</div></div>
+        <div class="pts-earn-pts">+${pointsConfig.signupPoints||100} pts</div>
+      </div>
+      <div class="pts-earn-row">
+        <div class="pts-earn-icon" style="background:#fff8f0"><span style="font-size:18px">🛒</span></div>
+        <div class="pts-earn-info"><div class="pts-earn-title">Place an Order</div><div class="pts-earn-sub">${pointsConfig.orderPointsRate||10} pts per MVR spent</div></div>
+        <div class="pts-earn-pts">+${pointsConfig.orderPointsRate||10} pts/MVR</div>
+      </div>
+      <div class="pts-earn-row">
+        <div class="pts-earn-icon" style="background:#f5f0ff"><span style="font-size:18px">👥</span></div>
+        <div class="pts-earn-info"><div class="pts-earn-title">Refer a Friend to ZentoShop</div><div class="pts-earn-sub">Both you and your friend get bonus points</div></div>
+        <div class="pts-earn-pts">+${pointsConfig.referralPoints||50} pts</div>
+      </div>
+    </div>
+
+    <!-- Referral Box -->
+    <div class="ref-box">
+      <div class="ref-title">👥 Invite Friends to ZentoShop</div>
+      <div class="ref-sub">Share your code — when a friend signs up on ZentoShop using your code, you both earn ${pointsConfig.referralPoints||50} bonus points! 🎁</div>
+      <div style="text-align:center;margin-bottom:12px">
+        <div style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono);letter-spacing:2px;margin-bottom:8px">YOUR REFERRAL CODE</div>
+        <div onclick="copyRefCode('${refCode}')" style="cursor:pointer;background:rgba(192,132,252,.15);border:2px dashed rgba(192,132,252,.5);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all .2s" onmouseenter="this.style.background='rgba(192,132,252,.25)'" onmouseleave="this.style.background='rgba(192,132,252,.15)'">
+          <div class="ref-code" style="font-size:26px;letter-spacing:4px">${refCode}</div>
+          <div style="background:#c084fc;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;color:#000;display:flex;align-items:center;gap:5px;flex-shrink:0"><i class="fa fa-copy"></i> TAP TO COPY</div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">Share this code with friends — they enter it at checkout to get a discount, and you earn points!</div>
+      </div>
+      <div class="ref-stats">
+        <div class="ref-stat"><div class="ref-stat-val">${CU.referralCount||0}</div><div class="ref-stat-lbl">FRIENDS JOINED</div></div>
+        <div class="ref-stat"><div class="ref-stat-val">${(CU.referralCount||0)*( pointsConfig.referralPoints||50)}</div><div class="ref-stat-lbl">POINTS EARNED</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="ref-share-btn" style="flex:1;justify-content:center;background:#25d366" onclick="shareWhatsApp('${shareText}','${shareUrl}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+        <button class="ref-share-btn" style="flex:1;justify-content:center;background:#7360f2" onclick="shareViber('${shareText}','${shareUrl}')"><i class="fab fa-viber"></i> Viber</button>
+      </div>
+      <button class="ref-share-btn" style="width:100%;justify-content:center;margin-top:8px;background:rgba(150,100,255,.2);color:#c084fc" onclick="copyRefLink('${shareUrl}')"><i class="fa fa-link"></i> Copy Referral Link</button>
+    </div>
+
+    <!-- Points History -->
+    <div class="pts-history">
+      <div style="padding:12px 16px;font-size:12px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)">Points History</div>
+      ${history.length ? history.map(h=>`
+        <div class="pts-hist-row">
+          <div><div class="pts-hist-desc">${h.desc||'—'}</div><div class="pts-hist-date">${h.date?new Date(h.date).toLocaleDateString('en-MV',{month:'short',day:'numeric',year:'numeric'}):'—'}</div></div>
+          <div class="pts-hist-amt ${h.type||'earn'}">${h.type==='use'?'-':'+'}${h.points||0} pts</div>
+        </div>`).join('') : '<div class="empty" style="padding:20px"><i class="fa fa-history"></i><p>No history yet</p></div>'}
+    </div>
+  `;
+}
+
+async function redeemPoints() {
+  if (!CU) return;
+  const threshold = pointsConfig.redeemThreshold || 100;
+  const discount  = pointsConfig.redeemDiscount  || 10;
+  if (CU.points < threshold) { notify('Not enough points', 'err'); return; }
+  const sets = Math.floor(CU.points / threshold);
+  const mvr_off = sets * discount;
+  if (!confirm(`Redeem ${sets * threshold} points for ${mvr_off} MVR discount? This will be applied to your next order.`)) return;
+  try {
+    const newPts = CU.points - (sets * threshold);
+    await update(ref(db, 'users/' + CU.uid), { points: newPts, pendingDiscount: mvr_off });
+    await push(ref(db, 'users/' + CU.uid + '/pointsHistory'), {
+      desc: `🎁 Redeemed ${sets*threshold} pts for ${mvr_off} MVR discount`,
+      points: sets*threshold, type: 'use', date: new Date().toISOString()
+    });
+    CU.points = newPts;
+    notify(`✓ ${mvr_off} MVR discount applied to your next order!`);
+    renderRewards();
+  } catch(e) { notify('Redeem failed: ' + e.message, 'err'); }
+}
+
+// ── CHECKOUT REFERRAL CODE ──
+async function applyRefCode() {
+  const code = ($('co-ref-inp')?.value || '').trim().toUpperCase();
+  if (!code) { notify('Enter a referral code', 'err'); return; }
+  if (code === CU?.referralCode) { notify("You can't use your own code", 'err'); return; }
+
+  // Check if already applied
+  if (appliedRefCode?.code === code) { notify('Code already applied ✓'); return; }
+
+  const btn = document.querySelector('[onclick="applyRefCode()"]');
+  if (btn) { btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>'; btn.disabled = true; }
+
+  try {
+    // Find owner in Firebase
+    const snap = await get(ref(db, 'users'));
+    let ownerUid = null, ownerName = '';
+    if (snap.exists()) {
+      Object.entries(snap.val()).forEach(([uid, u]) => {
+        if (u.referralCode === code) { ownerUid = uid; ownerName = u.fullName || 'User'; }
+      });
+    }
+
+    if (!ownerUid) {
+      notify('Invalid referral code', 'err');
+      if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
+      return;
+    }
+
+    // Calculate discount (use pointsConfig referralDiscount or default 10 MVR)
+    const discount = pointsConfig.redeemDiscount || 10;
+    appliedRefCode = { code, ownerUid, ownerName, discount };
+
+    // Show applied box
+    const box = $('ref-applied-box');
+    if (box) box.style.display = 'flex';
+    const txt = $('ref-applied-text'); if (txt) txt.textContent = 'Code "' + code + '" applied!';
+    const sub = $('ref-applied-sub'); if (sub) sub.textContent = 'From ' + ownerName + ' · They earn points when you order';
+    const disc = $('ref-applied-disc'); if (disc) disc.textContent = '- ' + mvr(discount);
+
+    // Show discount row in summary
+    const row = $('ref-disc-row'); if (row) row.style.display = 'flex';
+    const amt = $('ref-disc-amt'); if (amt) amt.textContent = '- ' + mvr(discount);
+
+    // Update total display
+    recalcCheckoutTotal();
+    notify('Referral code applied! ' + mvr(discount) + ' off 🎉');
+  } catch(e) {
+    notify('Error: ' + e.message, 'err');
+  } finally {
+    if (btn) { btn.innerHTML = '<i class="fa fa-check"></i> Apply'; btn.disabled = false; }
+  }
+}
+
+function removeRefCode() {
+  appliedRefCode = null;
+  const box = $('ref-applied-box'); if (box) box.style.display = 'none';
+  const row = $('ref-disc-row');    if (row) row.style.display = 'none';
+  const inp = $('co-ref-inp');      if (inp) inp.value = '';
+  recalcCheckoutTotal();
+  notify('Referral code removed');
+}
+
+function recalcCheckoutTotal() {
+  // Recalculate total shown in checkout summary
+  const items = Object.keys(cart).map(id => {
+    const p = prods.find(x => String(x.id) === String(id));
+    return p ? { ...p, qty: cart[id] } : null;
+  }).filter(Boolean);
+  const sub  = items.reduce((s,i) => s + i.price * i.qty, 0);
+  const ship = sub >= delivery.freeThreshold ? 0 : delivery.deliveryFee;
+  const tax  = sub * delivery.gstRate;
+  const base = sub + ship + tax;
+  const ptsDsc = CU?.pendingDiscount || 0;
+  const refDsc = appliedRefCode?.discount || 0;
+  const final  = Math.max(0, base - ptsDsc - refDsc);
+  const el = $('co-total-display'); if (el) el.textContent = mvr(final);
+  // Update place order button
+  document.querySelectorAll('[onclick^="placeOrder"]').forEach(btn => {
+    btn.setAttribute('onclick', 'placeOrder(' + final + ')');
+  });
+}
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => notify('Code copied: ' + code + ' ✓'));
+}
+
+function copyRefCode(code) {
+  navigator.clipboard.writeText(code).then(() => notify('Referral code copied! ✓'));
+}
+function copyRefLink(url) {
+  navigator.clipboard.writeText(url).then(() => notify('Referral link copied! ✓'));
+}
+function shareWhatsApp(text, url) {
+  window.open('https://wa.me/?text=' + encodeURIComponent(text + '\n' + url), '_blank');
+}
+function shareViber(text, url) {
+  window.open('viber://forward?text=' + encodeURIComponent(text + '\n' + url), '_blank');
+}
+
+/* ════════════════════════════
    ACCOUNT
 ════════════════════════════ */
 function renderAccount() {
@@ -1599,6 +2069,20 @@ function onFile(inp){const f=inp.files[0];if(!f)return;if(f.size>5*1024*1024){no
 function rmFile(){$('rcpt-file').value='';$('file-shown').style.display='none';}
 function copyText(id,btn){navigator.clipboard.writeText($(id).textContent).then(()=>{btn.textContent='OK ✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},2000);});}
 function notify(msg,type){const el=document.createElement('div');el.className='notif'+(type==='err'?' err':'');el.innerHTML=`<i class="fa fa-${type==='err'?'circle-xmark':'check-circle'}"></i>${msg}`;document.body.appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),320);},3000);}
+
+/* ─── REF URL PARAM — auto-fill referral code on register ─── */
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const refCode = params.get('ref');
+  if (refCode) {
+    // Store it so it's available when register form opens
+    sessionStorage.setItem('pendingRef', refCode.toUpperCase());
+    // Clean URL without reloading
+    try { history.replaceState({}, '', window.location.pathname); } catch {}
+  }
+})();
+
+// ref auto-fill handled inside switchTab below
 
 /* ─── SEARCH ─── */
 $('hdr-search').addEventListener('input',function(){curSearch=this.value;if(curSearch.length>0){curCat=null;renderProducts(null,curSearch);nav('products');}});
