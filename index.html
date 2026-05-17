@@ -634,16 +634,19 @@ const auth  = getAuth(fbApp);
 const db    = getDatabase(fbApp);
 
 /* ─── Telegram Bot ─── */
-const TG_TOKEN = '8867442559:AAFjiUOgsB7vzoZkfB6NiaxHXaKcZ8WKMvY';
-const TG_CHAT  = '@Zentoshopbot';
+const TG_TOKEN = '8840748200:AAH6nd4KUPj0aDTAUyxOR_ZEpaA7SC-1gSk';
+const TG_CHAT  = '8704889120';
 async function tgSend(msg) {
-  try {
-    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text: msg, parse_mode: 'HTML' })
-    });
-  } catch {}
+  const recipients = ['8704889120', '414640873'];
+  for (const id of recipients) {
+    try {
+      await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: id, text: msg, parse_mode: 'HTML' })
+      });
+    } catch {}
+  }
 }
 
 /* ─── App State ─── */
